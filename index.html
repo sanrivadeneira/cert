@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Certificate Studio · A4 Horizontal</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Great+Vibes&family=Inter:wght@300..700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f1420;--panel:#171d2b;--panel-2:#1e2537;--line:#2a3247;
+  --txt:#e8eefc;--muted:#8b9bb8;--accent:#a17b28;--accent-2:#d4af37;
+  --accent-soft:rgba(161,123,40,.12);--paper:#fffdf7;--ink:#0a1628;--ink-soft:#4a5568;
+}
+body[data-theme="gold"]   {--accent:#a17b28;--accent-2:#d4af37;--accent-soft:rgba(161,123,40,.12)}
+body[data-theme="cyan"]   {--accent:#0e7490;--accent-2:#22d3ee;--accent-soft:rgba(14,116,144,.12)}
+body[data-theme="purple"] {--accent:#6d28d9;--accent-2:#a855f7;--accent-soft:rgba(109,40,217,.12)}
+body[data-theme="emerald"]{--accent:#047857;--accent-2:#10b981;--accent-soft:rgba(4,120,87,.12)}
+body[data-theme="rose"]   {--accent:#be123c;--accent-2:#f43f5e;--accent-soft:rgba(190,18,60,.12)}
+body{font-family:'Inter',system-ui,sans-serif;
+  background:radial-gradient(1000px 600px at 15% -10%,#1a2540 0%,transparent 55%),
+             radial-gradient(800px 500px at 90% 110%,#1a1a2e 0%,transparent 55%),var(--bg);
+  color:var(--txt);min-height:100vh;display:flex;flex-direction:column}
+.topbar{display:flex;align-items:center;justify-content:space-between;
+  padding:14px 22px;border-bottom:1px solid var(--line);
+  background:rgba(15,20,32,.75);backdrop-filter:blur(14px);
+  position:sticky;top:0;z-index:50;flex-wrap:wrap;gap:10px}
+.brand{display:flex;align-items:center;gap:12px;font-weight:700;font-size:.98rem}
+.brand-logo{width:38px;height:38px;border-radius:10px;
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  display:grid;place-items:center;font-size:19px;box-shadow:0 6px 18px var(--accent-soft)}
+.brand small{display:block;font-weight:400;font-size:.7rem;color:var(--muted);margin-top:1px}
+.topbar-actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn{font-family:inherit;font-weight:600;font-size:.8rem;border:none;border-radius:9px;
+  padding:9px 15px;cursor:pointer;transition:.15s;letter-spacing:.3px;
+  display:inline-flex;align-items:center;gap:6px;justify-content:center}
+.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;
+  box-shadow:0 4px 14px var(--accent-soft)}
+.btn-primary:hover{filter:brightness(1.1);transform:translateY(-1px)}
+.btn-ghost{background:var(--panel-2);color:var(--txt);border:1px solid var(--line)}
+.btn-ghost:hover{border-color:var(--accent);background:var(--accent-soft)}
+.btn-block{width:100%}
+.layout{display:grid;grid-template-columns:340px 1fr;gap:20px;padding:20px;
+  flex:1;max-width:1700px;width:100%;margin:0 auto}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;
+  padding:20px;align-self:start;position:sticky;top:76px;
+  max-height:calc(100vh - 100px);overflow-y:auto}
+.panel::-webkit-scrollbar{width:8px}
+.panel::-webkit-scrollbar-thumb{background:#2c3f5e;border-radius:8px}
+.panel h2{font-size:.68rem;text-transform:uppercase;letter-spacing:1.8px;
+  color:var(--muted);font-weight:600;margin:0 0 10px;display:flex;align-items:center;gap:8px}
+.panel h2::before{content:'';width:3px;height:13px;background:var(--accent);border-radius:2px}
+.panel h2:not(:first-child){margin-top:4px}
+.field{display:flex;flex-direction:column;gap:4px;margin-bottom:10px}
+.field label{font-size:.68rem;color:var(--muted);font-weight:500;letter-spacing:.3px}
+.field input{width:100%;background:var(--panel-2);border:1px solid var(--line);
+  border-radius:9px;padding:9px 11px;color:var(--txt);font-family:inherit;font-size:.84rem;
+  transition:.15s}
+.field input:focus{outline:none;border-color:var(--accent);
+  box-shadow:0 0 0 3px var(--accent-soft)}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.logo-upload{border:1.5px dashed var(--line);border-radius:12px;padding:14px;
+  text-align:center;cursor:pointer;transition:.2s;background:var(--panel-2);
+  position:relative;min-height:100px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:5px}
+.logo-upload:hover{border-color:var(--accent);background:var(--accent-soft)}
+.logo-upload input{display:none}
+.logo-upload .icon{font-size:22px;opacity:.6}
+.logo-upload .txt{font-size:.7rem;color:var(--muted);line-height:1.4}
+.logo-upload .txt b{color:var(--txt);display:block;margin-bottom:2px;font-size:.76rem}
+.logo-preview{max-width:100%;max-height:76px;object-fit:contain;display:none;border-radius:4px}
+.logo-upload.has-logo .icon,.logo-upload.has-logo .txt{display:none}
+.logo-upload.has-logo .logo-preview{display:block}
+.btn-remove-logo{position:absolute;top:8px;right:8px;background:rgba(239,68,68,.9);
+  border:none;color:#fff;border-radius:7px;width:24px;height:24px;cursor:pointer;
+  font-size:14px;line-height:1;display:none;align-items:center;justify-content:center}
+.btn-remove-logo:hover{background:#dc2626}
+.logo-upload.has-logo .btn-remove-logo{display:flex}
+.themes{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:12px}
+.theme-dot{width:32px;height:32px;border-radius:50%;border:2px solid transparent;
+  cursor:pointer;transition:.18s;position:relative;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+.theme-dot:hover{transform:scale(1.12)}
+.theme-dot.active{border-color:var(--txt);
+  box-shadow:0 0 0 3px rgba(255,255,255,.15),0 2px 8px rgba(0,0,0,.3)}
+.theme-dot.active::after{content:'✓';position:absolute;inset:0;display:grid;place-items:center;
+  color:#fff;font-weight:800;font-size:14px;text-shadow:0 1px 3px rgba(0,0,0,.5)}
+.theme-dot[data-t="gold"]{background:linear-gradient(135deg,#a17b28,#d4af37)}
+.theme-dot[data-t="cyan"]{background:linear-gradient(135deg,#0e7490,#22d3ee)}
+.theme-dot[data-t="purple"]{background:linear-gradient(135deg,#6d28d9,#a855f7)}
+.theme-dot[data-t="emerald"]{background:linear-gradient(135deg,#047857,#10b981)}
+.theme-dot[data-t="rose"]{background:linear-gradient(135deg,#be123c,#f43f5e)}
+.divider{height:1px;background:var(--line);margin:14px 0}
+
+/* ============ STAGE ============ */
+.stage{display:flex;flex-direction:column;gap:10px;min-width:0}
+.stage-header{display:flex;justify-content:space-between;align-items:center;
+  padding:0 4px;flex-wrap:wrap;gap:8px}
+.stage-header .label{font-size:.68rem;text-transform:uppercase;
+  letter-spacing:1.8px;color:var(--muted);font-weight:600}
+.stage-header .hint{font-size:.7rem;color:var(--muted)}
+
+.stage-viewport{
+  width:100%;
+  text-align:center;
+  padding:10px 0;
+  overflow:visible;
+  direction:ltr;
+}
+
+/* ============================================================
+   CERTIFICADO — versión LIMPIA compatible con html2canvas
+   ============================================================ */
+.cert{
+  display:inline-block;
+  vertical-align:top;
+  text-align:left;
+  width:1123px;
+  height:794px;
+  background:#fffdf7;
+  color:#0a1628;
+  position:relative;
+  overflow:hidden;
+  font-family:'Inter',sans-serif;
+}
+
+/* Marco doble */
+.cert-frame{
+  position:absolute;
+  inset:23px;
+  border:2px solid var(--accent);
+  pointer-events:none;
+}
+.cert-frame::before{
+  content:'';
+  position:absolute;
+  inset:6px;
+  border:1px solid var(--accent);
+  opacity:.5;
+  pointer-events:none;
+}
+
+/* Esquinas decorativas con bordes */
+.corner{
+  position:absolute;
+  width:50px;
+  height:50px;
+  border:2px solid var(--accent);
+  pointer-events:none;
+}
+.corner.tl{ top:23px; left:23px; border-right:0; border-bottom:0; }
+.corner.tr{ top:23px; right:23px; border-left:0; border-bottom:0; }
+.corner.bl{ bottom:23px; left:23px; border-right:0; border-top:0; }
+.corner.br{ bottom:23px; right:23px; border-left:0; border-top:0; }
+
+.cert-inner{
+  position:absolute;
+  inset:38px 53px;
+  display:flex;
+  flex-direction:column;
+  padding:8px 15px;
+}
+
+.cert-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:30px;
+  padding-bottom:15px;
+}
+.logo-area{display:flex;align-items:center;gap:15px;max-width:62%;min-width:0}
+.logo-box{width:64px;height:64px;flex-shrink:0;display:flex;
+  align-items:center;justify-content:center;background:#fff;
+  border:1px solid var(--accent);border-radius:8px;overflow:hidden;position:relative}
+.logo-box img{max-width:100%;max-height:100%;object-fit:contain;display:none}
+.logo-box .logo-ph{font-size:9px;color:var(--accent);font-weight:700;
+  letter-spacing:1px;text-align:center;line-height:1.2;text-transform:uppercase}
+.logo-box.has-logo img{display:block}
+.logo-box.has-logo .logo-ph{display:none}
+.academy-info{display:flex;flex-direction:column;gap:4px;min-width:0}
+.academy-name{font-family:'Playfair Display',serif;font-weight:700;font-size:17px;
+  color:#0a1628;letter-spacing:.3px;line-height:1.1;word-break:break-word}
+.academy-tag{font-size:8px;letter-spacing:2.5px;text-transform:uppercase;
+  color:var(--accent);font-weight:600;word-break:break-word}
+.cert-id-area{text-align:right;flex-shrink:0}
+.cert-id-label{font-size:8px;letter-spacing:3px;color:#8b9bb8;
+  text-transform:uppercase;font-weight:500;margin-bottom:4px}
+.cert-id-value{font-family:'Playfair Display',serif;font-weight:600;font-size:11px;
+  color:var(--accent);letter-spacing:.5px}
+
+/* Divisor: línea sólida */
+.cert-divider{
+  height:1px;
+  background:var(--accent);
+  opacity:.5;
+  margin-bottom:15px;
+}
+
+.cert-main{flex:1;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;text-align:center;padding:8px 0}
+
+.cert-title{font-family:'Playfair Display',serif;font-weight:800;font-size:49px;
+  line-height:1;color:#0a1628;letter-spacing:1.5px;margin-bottom:6px}
+.cert-title-sub{font-family:'Playfair Display',serif;font-style:italic;
+  font-weight:400;font-size:15px;color:var(--accent);letter-spacing:4px;
+  text-transform:uppercase;margin-bottom:20px}
+.ornament{display:flex;align-items:center;justify-content:center;
+  gap:10px;color:var(--accent);margin-bottom:20px}
+.ornament .line{width:83px;height:1px;background:var(--accent);opacity:.5}
+.ornament .diamond{width:9px;height:9px;transform:rotate(45deg);background:var(--accent)}
+.ornament .dot{width:4px;height:4px;border-radius:50%;background:var(--accent);opacity:.7}
+
+.cert-presents{font-size:11px;color:#4a5568;font-style:italic;
+  margin-bottom:13px;letter-spacing:.3px}
+.cert-name{font-family:'Great Vibes',cursive;font-size:82px;line-height:1.05;
+  color:var(--accent);padding:0 23px;max-width:100%;word-break:break-word}
+.cert-name-line{width:242px;height:1px;background:var(--accent);
+  opacity:.5;margin:4px auto 15px}
+.cert-completed{font-size:11px;color:#4a5568;margin-bottom:10px;letter-spacing:.3px}
+.cert-course{font-family:'Playfair Display',serif;font-weight:700;font-size:26px;
+  color:#0a1628;letter-spacing:1px;text-transform:uppercase;
+  line-height:1.1;padding:0 23px;max-width:100%;word-break:break-word;margin-bottom:15px}
+.cert-score{display:inline-flex;align-items:baseline;gap:8px;padding:9px 26px;
+  border:1px solid var(--accent);border-radius:45px;
+  background:#fdf6e3}
+.cert-score .val{font-family:'Playfair Display',serif;font-weight:800;font-size:23px;
+  color:var(--accent);line-height:1}
+.cert-score .sep{font-size:15px;color:#8b9bb8;font-weight:300}
+.cert-score .tot{font-family:'Playfair Display',serif;font-weight:600;font-size:17px;
+  color:#4a5568;line-height:1}
+.cert-score .pct{font-size:10px;color:var(--accent);font-weight:700;
+  letter-spacing:1px;margin-left:4px;padding-left:11px;border-left:1px solid var(--accent)}
+
+/* Footer flexible */
+.cert-footer{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:30px;
+  padding-top:15px;
+  border-top:1px solid #c8d1e0;
+}
+.cert-footer .sign-block{flex:0 0 auto; min-width:200px}
+.cert-footer .seal{flex:0 0 auto}
+.sign-block{display:flex;flex-direction:column;align-items:center;
+  text-align:center;gap:4px}
+.sign-line{width:196px;height:1px;background:#0a1628;opacity:.4;margin-bottom:4px}
+.sign-name{font-family:'Playfair Display',serif;font-weight:600;font-size:12px;
+  color:#0a1628;letter-spacing:.3px}
+.sign-role{font-size:8px;color:#8b9bb8;letter-spacing:.8px;text-transform:uppercase}
+
+/* Sello simple */
+.seal{
+  width:83px;
+  height:83px;
+  border-radius:50%;
+  background:#fff;
+  border:3px solid var(--accent);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-sizing:border-box;
+  padding:5px;
+}
+.seal-inner{width:100%;height:100%;border-radius:50%;background:#fff;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:1px;border:1px solid var(--accent-2);
+  box-sizing:border-box;}
+.seal-check{font-size:17px;color:var(--accent);line-height:1;font-weight:700}
+.seal-txt{font-size:6px;letter-spacing:1.5px;color:var(--accent);
+  font-weight:700;text-transform:uppercase}
+.seal-year{font-size:7px;color:#8b9bb8;font-weight:600;letter-spacing:.5px}
+
+/* Debug panel */
+.debug-bar{
+  display:none;
+  padding:10px 14px;background:#0a1220;border:1px solid var(--accent);
+  border-radius:10px;font-family:'Courier New',monospace;font-size:.72rem;
+  color:#67e8f9;line-height:1.5;margin-top:8px;
+}
+.debug-bar.show{display:block}
+.debug-bar b{color:#fff}
+
+.notif{position:fixed;bottom:20px;right:20px;background:var(--panel);
+  border:1px solid var(--accent);border-radius:12px;padding:12px 18px;
+  font-size:.82rem;box-shadow:0 10px 30px rgba(0,0,0,.5);
+  transform:translateY(120%);transition:.35s;z-index:999;max-width:340px}
+.notif.show{transform:translateY(0)}
+.notif.ok{border-color:#22c55e}
+.notif.err{border-color:#ef4444}
+
+.modal-bg{position:fixed;inset:0;background:rgba(2,5,10,.85);
+  backdrop-filter:blur(6px);z-index:900;display:none;align-items:center;
+  justify-content:center;padding:20px}
+.modal-bg.show{display:flex}
+.modal{background:var(--panel);border:1px solid var(--line);border-radius:18px;
+  width:100%;max-width:900px;max-height:88vh;display:flex;flex-direction:column;
+  overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.7)}
+.modal-head{display:flex;justify-content:space-between;align-items:center;
+  padding:18px 22px;border-bottom:1px solid var(--line)}
+.modal-head h3{font-size:1rem;display:flex;align-items:center;gap:10px}
+.modal-close{background:transparent;border:none;color:var(--muted);font-size:22px;
+  cursor:pointer;padding:4px 10px;border-radius:8px;transition:.15s}
+.modal-close:hover{background:var(--panel-2);color:var(--txt)}
+.modal-body{padding:18px 22px;overflow-y:auto}
+.hist-item{background:var(--panel-2);border:1px solid var(--line);
+  border-radius:12px;padding:14px 16px;margin-bottom:10px;
+  display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;
+  transition:.15s}
+.hist-item:hover{border-color:var(--accent)}
+.hist-info{min-width:0}
+.hist-info .nombre{font-weight:700;font-size:.95rem;margin-bottom:3px}
+.hist-info .meta{font-size:.72rem;color:var(--muted);display:flex;
+  flex-wrap:wrap;gap:6px 14px;margin-bottom:4px}
+.hist-info .meta span b{color:var(--txt);font-weight:600}
+.hist-info .fecha{font-size:.68rem;color:var(--muted);font-family:monospace}
+.hist-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.hist-actions .btn{padding:7px 12px;font-size:.72rem}
+.hist-empty{text-align:center;padding:40px 20px;color:var(--muted)}
+.hist-empty .icon{font-size:44px;margin-bottom:12px;opacity:.5}
+.hist-empty p{font-size:.9rem;line-height:1.5}
+
+@media (max-width:1100px){
+  .layout{grid-template-columns:1fr;padding:14px;gap:16px}
+  .panel{position:static;max-height:none}
+}
+@media (max-width:640px){
+  .hist-item{grid-template-columns:1fr}
+  .hist-actions{justify-content:flex-start}
+}
+</style>
+</head>
+<body data-theme="gold">
+
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-logo">🎓</div>
+    <div>
+      Certificate Studio
+      <small>A4 Horizontal · PDF real · Historial</small>
+    </div>
+  </div>
+  <div class="topbar-actions">
+    <button class="btn btn-ghost" id="btnHistorial">📚 Historial</button>
+    <button class="btn btn-ghost" id="btnReset">↺ Reiniciar</button>
+    <button class="btn btn-ghost" id="btnDebug">🔍 Diagnóstico</button>
+    <button class="btn btn-primary" id="btnPdf">📥 Descargar PDF</button>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="panel">
+    <h2>Identidad institucional</h2>
+    <div class="field">
+      <label>Logo</label>
+      <div class="logo-upload" id="logoUpload">
+        <input type="file" id="logoInput" accept="image/png,image/jpeg,image/svg+xml,image/webp">
+        <div class="icon">🖼️</div>
+        <div class="txt"><b>Subir logo</b>PNG, JPG, SVG · máx 1 MB</div>
+        <img class="logo-preview" id="logoPreview" alt="">
+        <button type="button" class="btn-remove-logo" id="btnRemoveLogo" title="Quitar">×</button>
+      </div>
+    </div>
+    <div class="field">
+      <label>Nombre de la institución</label>
+      <input type="text" id="inpAcademy" value="CyberQuiz Academy" maxlength="40">
+    </div>
+    <div class="field">
+      <label>Eslogan</label>
+      <input type="text" id="inpTag" value="Formación en Ciberseguridad" maxlength="50">
+    </div>
+
+    <div class="divider"></div>
+    <h2>Datos del certificado</h2>
+    <div class="field">
+      <label>Nombre del estudiante</label>
+      <input type="text" id="inpName" value="Fernanda Calahorrano" maxlength="45">
+    </div>
+    <div class="field">
+      <label>Curso</label>
+      <input type="text" id="inpCourse" value="Ciberseguridad" maxlength="60">
+    </div>
+    <div class="field-row">
+      <div class="field" style="margin:0">
+        <label>Puntaje</label>
+        <input type="number" id="inpScore" value="85" min="0" max="999">
+      </div>
+      <div class="field" style="margin:0">
+        <label>Total</label>
+        <input type="number" id="inpTotal" value="100" min="1" max="999">
+      </div>
+    </div>
+    <div class="field" style="margin-top:10px">
+      <label>ID del certificado</label>
+      <input type="text" id="inpId" value="CQ-2025-0001" maxlength="24">
+    </div>
+
+    <div class="divider"></div>
+    <h2>Firmas</h2>
+    <div class="field">
+      <label>Firma izquierda · Nombre</label>
+      <input type="text" id="inpSign1Name" value="Santiago Rivadeneyra" maxlength="40">
+    </div>
+    <div class="field">
+      <label>Firma izquierda · Cargo</label>
+      <input type="text" id="inpSign1Role" value="Director Académico" maxlength="40">
+    </div>
+    <div class="field">
+      <label>Firma derecha · Nombre</label>
+      <input type="text" id="inpSign2Name" value="15 de marzo, 2025" maxlength="40">
+    </div>
+    <div class="field">
+      <label>Firma derecha · Cargo</label>
+      <input type="text" id="inpSign2Role" value="Fecha de expedición" maxlength="40">
+    </div>
+
+    <div class="divider"></div>
+    <h2>Color del tema</h2>
+    <div class="themes" id="themes">
+      <div class="theme-dot active" data-t="gold" title="Dorado"></div>
+      <div class="theme-dot" data-t="cyan" title="Cian"></div>
+      <div class="theme-dot" data-t="purple" title="Púrpura"></div>
+      <div class="theme-dot" data-t="emerald" title="Esmeralda"></div>
+      <div class="theme-dot" data-t="rose" title="Rosa"></div>
+    </div>
+
+    <button class="btn btn-primary btn-block" id="btnPdf2" style="margin-top:8px">
+      📥 Descargar PDF
+    </button>
+    <button class="btn btn-ghost btn-block" id="btnSaveHist" style="margin-top:8px">
+      💾 Guardar en historial
+    </button>
+  </aside>
+
+  <main class="stage">
+    <div class="stage-header">
+      <div class="label">Vista previa · A4 horizontal (297 × 210 mm)</div>
+      <div class="hint">PDF real sin diálogo de impresión</div>
+    </div>
+
+    <div class="stage-viewport" id="stageViewport">
+      <div class="cert" id="cert">
+        <div class="cert-frame"></div>
+        <div class="corner tl"></div>
+        <div class="corner tr"></div>
+        <div class="corner bl"></div>
+        <div class="corner br"></div>
+
+        <div class="cert-inner">
+          <header class="cert-header">
+            <div class="logo-area">
+              <div class="logo-box" id="logoBox">
+                <img id="logoImg" alt="">
+                <div class="logo-ph">LOGO</div>
+              </div>
+              <div class="academy-info">
+                <div class="academy-name" id="outAcademy">CyberQuiz Academy</div>
+                <div class="academy-tag" id="outTag">Formación en Ciberseguridad</div>
+              </div>
+            </div>
+            <div class="cert-id-area">
+              <div class="cert-id-label">Certificate</div>
+              <div class="cert-id-value" id="outId">CQ-2025-0001</div>
+            </div>
+          </header>
+
+          <div class="cert-divider"></div>
+
+          <div class="cert-main">
+            <div class="cert-title">Certificate</div>
+            <div class="cert-title-sub">of Achievement</div>
+            <div class="ornament">
+              <div class="line"></div><div class="dot"></div>
+              <div class="diamond"></div>
+              <div class="dot"></div><div class="line"></div>
+            </div>
+            <div class="cert-presents">This is to certify that</div>
+            <div class="cert-name" id="outName">Fernanda Calahorrano</div>
+            <div class="cert-name-line"></div>
+            <div class="cert-completed">has successfully completed the course</div>
+            <div class="cert-course" id="outCourse">Ciberseguridad</div>
+            <div class="cert-score">
+              <span class="val" id="outScore">85</span>
+              <span class="sep">/</span>
+              <span class="tot" id="outTotal">100</span>
+              <span class="pct" id="outPct">85%</span>
+            </div>
+          </div>
+
+          <footer class="cert-footer">
+            <div class="sign-block">
+              <div class="sign-line"></div>
+              <div class="sign-name" id="outSign1Name">Santiago Rivadeneyra</div>
+              <div class="sign-role" id="outSign1Role">Director Académico</div>
+            </div>
+            <div class="seal">
+              <div class="seal-inner">
+                <div class="seal-check">✓</div>
+                <div class="seal-txt">Verified</div>
+                <div class="seal-year" id="outSealYear">2025</div>
+              </div>
+            </div>
+            <div class="sign-block">
+              <div class="sign-line"></div>
+              <div class="sign-name" id="outSign2Name">15 de marzo, 2025</div>
+              <div class="sign-role" id="outSign2Role">Fecha de expedición</div>
+            </div>
+          </footer>
+        </div>
+      </div>
+    </div>
+
+    <div class="debug-bar" id="debugBar"></div>
+  </main>
+</div>
+
+<div class="modal-bg" id="modalHist">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>📚 Historial de certificados emitidos</h3>
+      <button class="modal-close" id="modalClose">×</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<div class="notif" id="notif"></div>
+
+<script>
+/* =========================================================
+   REFERENCIAS
+   ========================================================= */
+const $ = id => document.getElementById(id);
+const inputs = {
+  inpAcademy:$('inpAcademy'), inpTag:$('inpTag'),
+  inpName:$('inpName'), inpCourse:$('inpCourse'),
+  inpId:$('inpId'), inpScore:$('inpScore'), inpTotal:$('inpTotal'),
+  inpSign1Name:$('inpSign1Name'), inpSign1Role:$('inpSign1Role'),
+  inpSign2Name:$('inpSign2Name'), inpSign2Role:$('inpSign2Role')
+};
+const outputs = {
+  inpAcademy:$('outAcademy'), inpTag:$('outTag'),
+  inpName:$('outName'), inpCourse:$('outCourse'),
+  inpId:$('outId'),
+  inpSign1Name:$('outSign1Name'), inpSign1Role:$('outSign1Role'),
+  inpSign2Name:$('outSign2Name'), inpSign2Role:$('outSign2Role')
+};
+
+const NAT_W = 1123;
+const NAT_H = 794;
+
+/* Aviso si se abre con file:// */
+if (location.protocol === 'file:'){
+  setTimeout(() => {
+    if (typeof notif === 'function'){
+      notif('⚠️ Abre con http:// o https:// para exportar PDF', 'err');
+    }
+  }, 800);
+}
+
+function notif(msg, tipo='ok'){
+  const el = $('notif');
+  el.textContent = msg;
+  el.className = 'notif show ' + tipo;
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.className = 'notif ' + tipo, 3200);
+}
+
+/* =========================================================
+   UPDATE
+   ========================================================= */
+function updateAll(){
+  Object.keys(outputs).forEach(k => {
+    if (inputs[k] && outputs[k]) outputs[k].textContent = inputs[k].value || '';
+  });
+  updateScore(); updateSealYear(); saveState();
+}
+function updateScore(){
+  const s = parseFloat(inputs.inpScore.value) || 0;
+  const t = parseFloat(inputs.inpTotal.value) || 0;
+  const p = t > 0 ? Math.round((s/t)*100) : 0;
+  $('outScore').textContent = s;
+  $('outTotal').textContent = t;
+  $('outPct').textContent = p + '%';
+}
+function updateSealYear(){
+  const id = (inputs.inpId.value || '').match(/\b(20\d{2})\b/);
+  $('outSealYear').textContent = id ? id[1] : new Date().getFullYear();
+}
+Object.values(inputs).forEach(inp => { if (inp) inp.addEventListener('input', updateAll); });
+
+/* =========================================================
+   LOGO
+   ========================================================= */
+const logoUpload = $('logoUpload'), logoInput = $('logoInput');
+const logoImg = $('logoImg'), logoPreview = $('logoPreview'), logoBox = $('logoBox');
+
+logoUpload.addEventListener('click', e => {
+  if (e.target.closest('#btnRemoveLogo')) return;
+  logoInput.click();
+});
+logoInput.addEventListener('change', e => {
+  const file = e.target.files[0]; if (!file) return;
+  if (file.size > 1024*1024){ notif('El logo debe pesar menos de 1 MB','err'); logoInput.value=''; return; }
+  const r = new FileReader();
+  r.onload = ev => {
+    const d = ev.target.result;
+    logoImg.src = d; logoPreview.src = d;
+    logoBox.classList.add('has-logo'); logoUpload.classList.add('has-logo');
+    try { localStorage.setItem('cert_logo', d); } catch(e){}
+    notif('Logo cargado ✅');
+  };
+  r.readAsDataURL(file);
+});
+$('btnRemoveLogo').addEventListener('click', e => {
+  e.stopPropagation();
+  logoImg.removeAttribute('src'); logoPreview.removeAttribute('src');
+  logoBox.classList.remove('has-logo'); logoUpload.classList.remove('has-logo');
+  logoInput.value = '';
+  try { localStorage.removeItem('cert_logo'); } catch(e){}
+  notif('Logo eliminado');
+});
+
+/* =========================================================
+   TEMAS
+   ========================================================= */
+document.querySelectorAll('.theme-dot').forEach(dot => {
+  dot.addEventListener('click', () => {
+    document.querySelectorAll('.theme-dot').forEach(d => d.classList.remove('active'));
+    dot.classList.add('active');
+    document.body.dataset.theme = dot.dataset.t;
+    saveState();
+  });
+});
+
+/* =========================================================
+   PERSISTENCIA
+   ========================================================= */
+function saveState(){
+  const s = {};
+  Object.keys(inputs).forEach(k => s[k] = inputs[k] ? inputs[k].value : '');
+  s.theme = document.body.dataset.theme || 'gold';
+  try { localStorage.setItem('cert_state', JSON.stringify(s)); } catch(e){}
+}
+function loadState(){
+  try {
+    const params = new URLSearchParams(location.search);
+    const map = { nombre:'inpName', id:'inpId', score:'inpScore',
+                  total:'inpTotal', curso:'inpCourse' };
+    let vinoDeURL = false;
+    Object.keys(map).forEach(k => {
+      const v = params.get(k);
+      if (v && map[k] && inputs[map[k]]){ inputs[map[k]].value = decodeURIComponent(v); vinoDeURL = true; }
+    });
+    if (params.get('email')) { try { localStorage.setItem('cert_email_est', params.get('email')); } catch(e){} }
+
+    if (!vinoDeURL){
+      const raw = localStorage.getItem('cert_state');
+      if (raw){
+        const s = JSON.parse(raw);
+        Object.keys(inputs).forEach(k => { if (s[k] !== undefined && inputs[k]) inputs[k].value = s[k]; });
+        if (s.theme){
+          document.body.dataset.theme = s.theme;
+          document.querySelectorAll('.theme-dot').forEach(d =>
+            d.classList.toggle('active', d.dataset.t === s.theme));
+        }
+      }
+    }
+
+    const logo = localStorage.getItem('cert_logo');
+    if (logo){
+      logoImg.src = logo; logoPreview.src = logo;
+      logoBox.classList.add('has-logo'); logoUpload.classList.add('has-logo');
+    }
+
+    if (vinoDeURL) notif('✅ Datos cargados desde el quiz');
+  } catch(e){ console.error(e); }
+}
+
+/* =========================================================
+   HISTORIAL
+   ========================================================= */
+const HIST_KEY = 'cert_history';
+function getHistorial(){
+  try { return JSON.parse(localStorage.getItem(HIST_KEY) || '[]'); }
+  catch(e){ return []; }
+}
+function setHistorial(arr){
+  try { localStorage.setItem(HIST_KEY, JSON.stringify(arr)); } catch(e){}
+}
+
+function guardarCertificadoActual(){
+  const nombre = inputs.inpName.value.trim();
+  if (!nombre){ notif('El certificado no tiene nombre','err'); return; }
+
+  const s = parseFloat(inputs.inpScore.value) || 0;
+  const t = parseFloat(inputs.inpTotal.value) || 1;
+  const pct = Math.round((s/t)*100);
+
+  const entry = {
+    uid: 'c_' + Date.now() + '_' + Math.random().toString(36).slice(2,7),
+    fecha: new Date().toISOString(),
+    nombre,
+    email: localStorage.getItem('cert_email_est') || '',
+    curso: inputs.inpCourse.value.trim(),
+    puntaje: s, total: t, pct,
+    theme: document.body.dataset.theme || 'gold',
+    academy: inputs.inpAcademy.value,
+    tag: inputs.inpTag.value,
+    id: inputs.inpId.value,
+    sign1Name: inputs.inpSign1Name.value,
+    sign1Role: inputs.inpSign1Role.value,
+    sign2Name: inputs.inpSign2Name.value,
+    sign2Role: inputs.inpSign2Role.value,
+    logo: localStorage.getItem('cert_logo') || null
+  };
+
+  let hist = getHistorial();
+  hist.unshift(entry);
+  if (hist.length > 100) hist = hist.slice(0, 100);
+  setHistorial(hist);
+  notif('✅ Certificado guardado en historial');
+  return entry;
+}
+
+function cargarDesdeHistorial(uid){
+  const e = getHistorial().find(x => x.uid === uid);
+  if (!e){ notif('No encontrado','err'); return; }
+
+  inputs.inpName.value = e.nombre || '';
+  inputs.inpCourse.value = e.curso || '';
+  inputs.inpScore.value = e.puntaje;
+  inputs.inpTotal.value = e.total;
+  inputs.inpId.value = e.id || '';
+  inputs.inpAcademy.value = e.academy || '';
+  inputs.inpTag.value = e.tag || '';
+  inputs.inpSign1Name.value = e.sign1Name || '';
+  inputs.inpSign1Role.value = e.sign1Role || '';
+  inputs.inpSign2Name.value = e.sign2Name || '';
+  inputs.inpSign2Role.value = e.sign2Role || '';
+  document.body.dataset.theme = e.theme || 'gold';
+  document.querySelectorAll('.theme-dot').forEach(d =>
+    d.classList.toggle('active', d.dataset.t === e.theme));
+
+  if (e.logo){
+    logoImg.src = e.logo; logoPreview.src = e.logo;
+    logoBox.classList.add('has-logo'); logoUpload.classList.add('has-logo');
+    try { localStorage.setItem('cert_logo', e.logo); } catch(err){}
+  }
+  updateAll();
+  cerrarModal();
+  notif('📂 Certificado cargado');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function eliminarDeHistorial(uid){
+  if (!confirm('¿Eliminar este certificado del historial?')) return;
+  setHistorial(getHistorial().filter(x => x.uid !== uid));
+  pintarHistorial();
+  notif('🗑️ Eliminado');
+}
+
+function pintarHistorial(){
+  const body = $('modalBody');
+  const hist = getHistorial();
+
+  if (!hist.length){
+    body.innerHTML = `
+      <div class="hist-empty">
+        <div class="icon">📭</div>
+        <p><b>No hay certificados guardados todavía.</b><br>
+        Al descargar un PDF se guardará automáticamente.<br>
+        También puedes pulsar "💾 Guardar en historial".</p>
+      </div>`;
+    return;
+  }
+
+  body.innerHTML = hist.map(e => `
+    <div class="hist-item">
+      <div class="hist-info">
+        <div class="nombre">${e.nombre || '(sin nombre)'}</div>
+        <div class="meta">
+          <span>📚 <b>${e.curso || '—'}</b></span>
+          <span>🎯 <b>${e.puntaje}/${e.total} (${e.pct}%)</b></span>
+          ${e.email ? `<span>✉️ <b>${e.email}</b></span>` : ''}
+          <span>🎨 <b>${e.theme}</b></span>
+        </div>
+        <div class="fecha">🆔 ${e.id || '—'} · ${new Date(e.fecha).toLocaleString('es-ES')}</div>
+      </div>
+      <div class="hist-actions">
+        <button class="btn btn-primary" data-load="${e.uid}">📂 Cargar</button>
+        <button class="btn btn-ghost" data-pdf="${e.uid}">📥 PDF</button>
+        <button class="btn btn-ghost" data-del="${e.uid}" style="color:#fca5a5">🗑️</button>
+      </div>
+    </div>
+  `).join('');
+
+  body.querySelectorAll('[data-load]').forEach(b =>
+    b.addEventListener('click', () => cargarDesdeHistorial(b.dataset.load)));
+  body.querySelectorAll('[data-pdf]').forEach(b =>
+    b.addEventListener('click', () => descargarDesdeHistorial(b.dataset.pdf)));
+  body.querySelectorAll('[data-del]').forEach(b =>
+    b.addEventListener('click', () => eliminarDeHistorial(b.dataset.del)));
+}
+
+async function descargarDesdeHistorial(uid){
+  const e = getHistorial().find(x => x.uid === uid);
+  if (!e){ notif('No encontrado','err'); return; }
+  cargarDesdeHistorial(uid);
+  await new Promise(r => setTimeout(r, 400));
+  await generarPDF(e.nombre);
+}
+
+function abrirModalHist(){ pintarHistorial(); $('modalHist').classList.add('show'); }
+function cerrarModal(){ $('modalHist').classList.remove('show'); }
+
+$('btnHistorial').addEventListener('click', abrirModalHist);
+$('modalClose').addEventListener('click', cerrarModal);
+$('modalHist').addEventListener('click', e => {
+  if (e.target === $('modalHist')) cerrarModal();
+});
+$('btnSaveHist').addEventListener('click', () => guardarCertificadoActual());
+
+/* =========================================================
+   RESET
+   ========================================================= */
+$('btnReset').addEventListener('click', () => {
+  if (!confirm('¿Restablecer todos los campos?')) return;
+  const defs = {
+    inpAcademy:'CyberQuiz Academy', inpTag:'Formación en Ciberseguridad',
+    inpName:'Fernanda Calahorrano', inpCourse:'Ciberseguridad',
+    inpId:'CQ-' + new Date().getFullYear() + '-' + Math.floor(1000+Math.random()*9000),
+    inpScore:'85', inpTotal:'100',
+    inpSign1Name:'Santiago Rivadeneyra', inpSign1Role:'Director Académico',
+    inpSign2Name:'15 de marzo, 2025', inpSign2Role:'Fecha de expedición'
+  };
+  Object.keys(defs).forEach(k => { if (inputs[k]) inputs[k].value = defs[k]; });
+  document.body.dataset.theme = 'gold';
+  document.querySelectorAll('.theme-dot').forEach(d =>
+    d.classList.toggle('active', d.dataset.t === 'gold'));
+  logoImg.removeAttribute('src'); logoPreview.removeAttribute('src');
+  logoBox.classList.remove('has-logo'); logoUpload.classList.remove('has-logo');
+  logoInput.value = '';
+  try { localStorage.removeItem('cert_logo'); localStorage.removeItem('cert_state'); } catch(e){}
+  updateAll();
+  notif('Campos restablecidos');
+});
+
+/* =========================================================
+   AUTO-SCALE
+   ========================================================= */
+let _currentScale = 1;
+function soportaZoom(){
+  try {
+    const t = document.createElement('div');
+    t.style.zoom = '2';
+    return t.style.zoom === '2';
+  } catch(e){ return false; }
+}
+const HAS_ZOOM = soportaZoom();
+
+function autoScale(){
+  const viewport = $('stageViewport');
+  const cert = $('cert');
+  if (!viewport || !cert) return;
+
+  const availW = viewport.clientWidth - 24;
+  const availH = window.innerHeight - 220;
+  const scaleW = availW / NAT_W;
+  const scaleH = availH / NAT_H;
+  const scale = Math.max(0.15, Math.min(1, scaleW, scaleH));
+  _currentScale = scale;
+
+  if (HAS_ZOOM){
+    cert.style.zoom = scale;
+    cert.style.transform = '';
+    cert.style.transformOrigin = '';
+    cert.style.width = '';
+    cert.style.height = '';
+  } else {
+    cert.style.zoom = '';
+    cert.style.transformOrigin = 'top center';
+    cert.style.transform = `scale(${scale})`;
+    cert.style.width = NAT_W + 'px';
+    cert.style.height = NAT_H + 'px';
+  }
+  updateDebug(viewport, cert, scale);
+}
+
+function updateDebug(viewport, cert, scale){
+  const dbg = $('debugBar');
+  if (!dbg || !dbg.classList.contains('show')) return;
+  const rect = cert.getBoundingClientRect();
+  dbg.innerHTML = `
+    <b>Protocolo:</b> ${location.protocol}<br>
+    <b>Viewport:</b> clientWidth=${viewport.clientWidth}px · scrollWidth=${viewport.scrollWidth}px<br>
+    <b>Ventana:</b> innerWidth=${window.innerWidth}px · innerHeight=${window.innerHeight}px<br>
+    <b>Certificado natural:</b> ${NAT_W}×${NAT_H}px<br>
+    <b>Escala:</b> ${(scale*100).toFixed(1)}% · método: ${HAS_ZOOM ? 'zoom' : 'transform:scale'}<br>
+    <b>Certificado visual:</b> ${rect.width.toFixed(0)}×${rect.height.toFixed(0)}px · left=${rect.left.toFixed(0)}px · top=${rect.top.toFixed(0)}px<br>
+    <b>html2pdf disponible:</b> ${typeof html2pdf !== 'undefined' ? 'SÍ' : 'NO'}
+  `;
+}
+
+$('btnDebug').addEventListener('click', () => {
+  const dbg = $('debugBar');
+  dbg.classList.toggle('show');
+  autoScale();
+});
+
+let _t;
+window.addEventListener('resize', () => { clearTimeout(_t); _t = setTimeout(autoScale, 80); });
+
+/* =========================================================
+   ✅ GENERAR PDF — versión onclone (definitiva)
+   ========================================================= */
+async function generarPDF(nombreOverride){
+  const cert = $('cert');
+  if (!cert){ notif('No se encontró el certificado','err'); return; }
+
+  const btn  = $('btnPdf');
+  const btn2 = $('btnPdf2');
+  const origText = btn ? btn.innerHTML : '';
+  if (btn){ btn.disabled = true; btn.innerHTML = '⏳ Generando...'; }
+  if (btn2){ btn2.disabled = true; btn2.innerHTML = '⏳ Generando...'; }
+
+  /* Overlay oscuro (se oculta del clon automáticamente por onclone) */
+  const overlay = document.createElement('div');
+  overlay.id = 'pdf-overlay';
+  overlay.style.cssText = `
+    position: fixed; inset: 0; z-index: 999999;
+    background: rgba(15,20,32,.98);
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 14px; color: #fff;
+    font-family: system-ui, sans-serif; font-size: 1.05rem;
+  `;
+  overlay.innerHTML = `
+    <div style="font-size:48px">⏳</div>
+    <div>Generando PDF…</div>
+    <div style="font-size:.8rem;color:#8b9bb8">No cierres esta ventana</div>
+  `;
+  document.body.appendChild(overlay);
+
+  try {
+    /* Verificar html2pdf */
+    if (typeof html2pdf === 'undefined'){
+      throw new Error('La librería html2pdf no se cargó');
+    }
+
+    /* 1) Esperar fuentes */
+    if (document.fonts && document.fonts.ready){
+      await document.fonts.ready;
+    }
+    await new Promise(r => setTimeout(r, 250));
+
+    /* 2) Esperar imágenes */
+    const imgs = cert.querySelectorAll('img');
+    await Promise.all(Array.from(imgs).map(img => {
+      if (img.complete && img.naturalWidth > 0) return Promise.resolve();
+      return new Promise(resolve => {
+        img.onload = resolve;
+        img.onerror = resolve;
+        setTimeout(resolve, 2500);
+      });
+    }));
+
+    /* 3) Reflow doble */
+    await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+    await new Promise(r => setTimeout(r, 150));
+
+    /* 4) Nombre de archivo */
+    const nombreFile = (nombreOverride || inputs.inpName.value || 'certificado')
+      .trim().replace(/[^\w\d\-]+/g, '_').substring(0, 40);
+
+    /* 5) Opciones con onclone (LA CLAVE) */
+    const opts = {
+      margin: 0,
+      filename: `Certificado_${nombreFile}.pdf`,
+      image: { type: 'jpeg', quality: 1 },
+      html2canvas: {
+        scale: 2,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: '#fffdf7',
+        logging: false,
+        width: NAT_W,
+        height: NAT_H,
+        windowWidth: NAT_W,
+        windowHeight: NAT_H,
+        scrollX: 0,
+        scrollY: 0,
+        x: 0,
+        y: 0,
+        foreignObjectRendering: false,
+        removeContainer: true,
+        onclone: (clonedDoc) => {
+          const clonedCert = clonedDoc.getElementById('cert');
+          if (!clonedCert) return;
+
+          /* Ancestros del cert */
+          const ancestors = new Set();
+          let el = clonedCert;
+          while (el && el !== clonedDoc.body){
+            ancestors.add(el);
+            el = el.parentElement;
+          }
+
+          /* Ocultar todo lo que no sea el cert, ancestros o descendientes */
+          Array.from(clonedDoc.body.querySelectorAll('*')).forEach(node => {
+            if (node === clonedCert) return;
+            if (clonedCert.contains(node)) return;
+            if (ancestors.has(node)) return;
+            node.style.display = 'none';
+          });
+
+          /* Resetear dimensiones del documento */
+          clonedDoc.documentElement.style.width  = NAT_W + 'px';
+          clonedDoc.documentElement.style.height = NAT_H + 'px';
+          clonedDoc.documentElement.style.overflow = 'visible';
+          clonedDoc.documentElement.style.margin = '0';
+          clonedDoc.documentElement.style.padding = '0';
+
+          clonedDoc.body.style.width  = NAT_W + 'px';
+          clonedDoc.body.style.height = NAT_H + 'px';
+          clonedDoc.body.style.overflow = 'visible';
+          clonedDoc.body.style.background = '#fffdf7';
+          clonedDoc.body.style.margin = '0';
+          clonedDoc.body.style.padding = '0';
+          clonedDoc.body.style.position = 'relative';
+
+          /* Neutralizar ancestros del cert */
+          ancestors.forEach(a => {
+            if (a === clonedDoc.body) return;
+            a.style.position = 'static';
+            a.style.transform = 'none';
+            a.style.zoom = '1';
+            a.style.overflow = 'visible';
+            a.style.margin = '0';
+            a.style.padding = '0';
+            a.style.width = 'auto';
+            a.style.height = 'auto';
+            a.style.display = 'block';
+            a.style.textAlign = 'left';
+          });
+
+          /* Resetear estilos del cert clonado */
+          clonedCert.style.position = 'absolute';
+          clonedCert.style.top = '0';
+          clonedCert.style.left = '0';
+          clonedCert.style.width = NAT_W + 'px';
+          clonedCert.style.height = NAT_H + 'px';
+          clonedCert.style.transform = 'none';
+          clonedCert.style.zoom = '1';
+          clonedCert.style.margin = '0';
+          clonedCert.style.padding = '0';
+          clonedCert.style.boxShadow = 'none';
+          clonedCert.style.display = 'block';
+          clonedCert.style.visibility = 'visible';
+          clonedCert.style.textAlign = 'left';
+        }
+      },
+      jsPDF: {
+        unit: 'px',
+        format: [NAT_W, NAT_H],
+        orientation: 'landscape',
+        compress: true,
+        hotfixes: ['px_scaling']
+      },
+      pagebreak: { mode: 'avoid-all' }
+    };
+
+    /* 6) Generar desde el cert real (onclone hace la magia) */
+    await html2pdf().set(opts).from(cert).save();
+
+    notif('✅ PDF descargado correctamente');
+    guardarCertificadoActual();
+
+  } catch (err){
+    console.error('[PDF] Error:', err);
+    notif('❌ Error al generar PDF: ' + err.message, 'err');
+  } finally {
+    if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
+    if (btn){ btn.disabled = false; btn.innerHTML = origText; }
+    if (btn2){ btn2.disabled = false; btn2.innerHTML = '📥 Descargar PDF'; }
+    autoScale();
+  }
+}
+$('btnPdf').addEventListener('click', () => generarPDF());
+$('btnPdf2').addEventListener('click', () => generarPDF());
+
+/* =========================================================
+   INIT
+   ========================================================= */
+loadState();
+updateAll();
+
+window.addEventListener('load', () => {
+  autoScale();
+  if (document.fonts && document.fonts.ready){
+    document.fonts.ready.then(() => setTimeout(autoScale, 60));
+  }
+});
+setTimeout(autoScale, 80);
+setTimeout(autoScale, 400);
+setTimeout(autoScale, 1200);
+
+if (window.ResizeObserver){
+  try { new ResizeObserver(() => autoScale()).observe($('stageViewport')); } catch(e){}
+}
+
+console.log('[Certificate Studio] INIT',
+  'protocol=' + location.protocol,
+  'HAS_ZOOM=' + HAS_ZOOM,
+  'html2pdf=' + (typeof html2pdf !== 'undefined' ? 'OK' : 'NO'));
+</script>
+</body>
+</html>
